@@ -1,95 +1,134 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
+import { Poppins } from "next/font/google";
+import { AnimatePresence } from "framer-motion";
+import React from "react";
+import Header from "../components/Header";
+import BackgroundImage from "../components/BackgroundImage";
+import Slides from "../components/Slides";
+import Controls from "../components/Controls";
+import SlideInfo from "../components/SlideInfo";
+// import Slides from "@/components/Slides";
+// import SlideInfo from "@/components/SlideInfo";
+// import Controls from "@/components/Controls";
+
+
+// ** google fonts
+const inter = Poppins({
+  subsets: ["latin"],
+  weight: ["400"],
+});
+
+//** data structure */
+export type Data = {
+  img: string;
+  title: string;
+  description: string;
+  location: string;
+};
+
+export type CurrentSlideData = {
+  data: Data;
+  index: number;
+};
 
 export default function Home() {
+  const [data, setData] = React.useState<Data[]>(sliderData.slice(1));
+  const [transitionData, setTransitionData] = React.useState<Data>(
+    sliderData[0]
+  );
+  const [currentSlideData, setCurrentSlideData] =
+    React.useState<CurrentSlideData>({
+      data: initData,
+      index: 0,
+    });
+
+
+    //** return main tag */
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <main
+      className={`
+       ${inter.className}
+        relative min-h-screen select-none overflow-hidden text-white antialiased`}
+    >
+      <AnimatePresence>
+        {/** Background image component */}
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+        <BackgroundImage
+          transitionData={transitionData}
+          currentSlideData={currentSlideData}
         />
-      </div>
+        <div className="  absolute z-20  h-full w-full">
+          {/** header component */}
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+          <Header />
+          <div className=" flex h-full w-full grid-cols-10 flex-col md:grid">
+            {/** Slider left section content */}
+            <div className=" col-span-4 mb-3 flex h-full flex-1 flex-col justify-end px-5 md:mb-0 md:justify-center md:px-10">
+              <SlideInfo
+                transitionData={transitionData}
+                currentSlideData={currentSlideData}
+              />
+            </div>
+            
+            {/** Slider Right carousel content */}
+            <div className=" col-span-6 flex h-full flex-1 flex-col justify-start p-4 md:justify-center md:p-10">
+              <Slides data={data} />
+              <Controls
+                currentSlideData={currentSlideData}
+                data={data}
+                transitionData={transitionData}
+                initData={initData}
+                handleData={setData}
+                handleTransitionData={setTransitionData}
+                handleCurrentSlideData={setCurrentSlideData}
+                sliderData={sliderData}
+              />
+            </div>
+          </div>
+        </div>
+      </AnimatePresence>
     </main>
   );
 }
+
+const sliderData = [
+  {
+    img: "/1.png",
+    location: "United States",
+    description:
+      "Tesla is accelerating the world's transition to sustainable energy with electric cars",
+    title: "Tesla",
+  },
+  {
+    img: "/2.png",
+    title: "BMW",
+    description:
+      "Since 1933, almost every BMW front has featured a twin kidney grille. Though the design has changed over time – becoming smarter and more functional – it still acts as a distinctive brand ID",
+    location: "Germany",
+  },
+  {
+    img: "/3.png",
+    title: "Audi",
+    description:
+      "This German luxury brand is known for technology and style as much as its performance, well-crafted interiors, and its trademark Quattro all-wheel-drive system. Nearly every model is a solid performer with a high-grade interior.",
+    location: "Germany",
+  },
+  {
+    img: "/4.png",
+    title: "Porsche",
+    description:
+      "A timeless design, the unmistakable silhouette of the 911 is characterized by its iconic flyline. It has barely changed since 1963, and has shaped the DNA of all Porsche models.",
+    location: "Germany",
+  },
+  {
+    img: "/7.png",
+    title: "Jaguar",
+    description:
+      "Our cars are a manifestation of our passion. Performance that cannot be measured, only felt. That’s why we call it art.",
+    location: "United Kingdom",
+  },
+];
+
+
+//** slider data */
+const initData = sliderData[0];
