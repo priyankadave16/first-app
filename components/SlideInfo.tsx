@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import OtherInfo from "./OtherInfo";
 import { IoMdBookmark } from "react-icons/io";
 import { CurrentSlideData, Data } from "../app/page";
+import CustomButton from "./customButton";
 
 type Props = {
   transitionData: Data;
@@ -10,6 +11,13 @@ type Props = {
 };
 
 function SlideInfo({ transitionData, currentSlideData }: Props) {
+  const handleScroll = () => {
+    const nextSection = document.getElementById("discover");
+
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
   return (
     <>
       <motion.span layout className=" mb-2 h-1 w-5 rounded-full bg-white" />
@@ -26,9 +34,15 @@ function SlideInfo({ transitionData, currentSlideData }: Props) {
         <button
           className=" w-fit rounded-full border-[1px] border-[#ffffff8f] px-6 py-3 text-[10px] font-thin transition duration-300 
             ease-in-out hover:bg-white hover:text-black "
+            
         >
           DEMO DRIVE
         </button>
+        <CustomButton
+          title="Explore Cars"
+          containerStyles="bg-primary-blue text-white rounded-full mt-10"
+          handleClick={handleScroll}
+        />
       </motion.div>
     </>
   );

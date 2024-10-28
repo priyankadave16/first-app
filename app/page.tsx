@@ -1,12 +1,14 @@
 'use client';
 import { Poppins } from "next/font/google";
 import { AnimatePresence } from "framer-motion";
-import React from "react";
+import React, { useState } from "react";
 import Header from "../components/Header";
 import BackgroundImage from "../components/BackgroundImage";
 import Slides from "../components/Slides";
 import Controls from "../components/Controls";
 import SlideInfo from "../components/SlideInfo";
+import CustomButton from "../components/customButton";
+import CarDetails from "../components/carDetails";
 // import Slides from "@/components/Slides";
 // import SlideInfo from "@/components/SlideInfo";
 // import Controls from "@/components/Controls";
@@ -33,6 +35,7 @@ export type CurrentSlideData = {
 
 export default function Home() {
   const [data, setData] = React.useState<Data[]>(sliderData.slice(1));
+  const [isOpen, setIsOpen] = useState(false);
   const [transitionData, setTransitionData] = React.useState<Data>(
     sliderData[0]
   );
@@ -68,7 +71,16 @@ export default function Home() {
                 transitionData={transitionData}
                 currentSlideData={currentSlideData}
               />
+
+<CustomButton
+            title='View More'
+            containerStyles='w-full py-[16px] rounded-full bg-primary-blue'
+            textStyles='text-white text-[14px] leading-[17px] font-bold'
+            rightIcon='/right-arrow.svg'
+            handleClick={() => setIsOpen(true)}
+          />
             </div>
+            <CarDetails isOpen={isOpen} closeModal={() => setIsOpen(false)} car={transitionData} />
             
             {/** Slider Right carousel content */}
             <div className=" col-span-6 flex h-full flex-1 flex-col justify-start p-4 md:justify-center md:p-10">
